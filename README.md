@@ -33,9 +33,12 @@ cabal new-run spec -- --match "Lecture00"
 
 Вы должны увидеть, что "всё работает":
 
-![setup is ok](https://github.com/ak3n/fpcourse/blob/master/assets/SetUpIsDone.jpg)
+![setup is ok](./assets/SetUpIsDone.jpg)
 
 По любым вопросам можно обратиться к официальной [документации](https://www.haskell.org/documentation/) или к преподавателям в чате [https://teleg.run/urfu_fp_intro_20_chat](https://teleg.run/urfu_fp_intro_20_chat).
+
+## *Опционально* Настройте среду разработки
+
 
 # Расписание
 
