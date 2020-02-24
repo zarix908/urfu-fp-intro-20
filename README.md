@@ -13,7 +13,10 @@ https://www.haskell.org/platform/mac.html или
 ```
 brew install ghc cabal-install
 ```
-
+Также добавьте `.cabal/bin` в `PATH`:
+```
+export PATH=$PATH:~/.cabal/bin
+```
 ### Linux
 
 https://www.haskell.org/downloads/linux/
