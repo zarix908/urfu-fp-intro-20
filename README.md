@@ -8,9 +8,7 @@
 
 ### MacOS
 
-https://www.haskell.org/platform/mac.html
-
-или
+https://www.haskell.org/platform/mac.html или
 
 ```
 brew install ghc cabal-install
@@ -29,7 +27,7 @@ https://www.haskell.org/platform/windows.html.
 Чтобы убедиться, что всё установлено верно, запустите тест:
 
 ```
-cd fpcourse
+cd urfu-fp-intro-20
 cabal new-run spec -- --match "Lecture00"
 ```
 
@@ -57,3 +55,7 @@ cabal new-run spec -- --match "Lecture00"
 12     | 14 мая | * выходной *
 13     | 21 мая | Архитектура функциональных приложений
 14     | 28 мая | ?
+
+# Спонсоры
+
+Курс проводится при поддержке компании [Typeable](http://typeable.io) и компании [СКБ Контур](https://kontur.ru/).
