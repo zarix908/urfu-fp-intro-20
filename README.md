@@ -38,6 +38,14 @@ cabal new-run spec -- --match "Lecture00"
 По любым вопросам можно обратиться к официальной [документации](https://www.haskell.org/documentation/) или к преподавателям в чате [https://teleg.run/urfu_fp_intro_20_chat](https://teleg.run/urfu_fp_intro_20_chat).
 
 ## *Опционально* Настройте среду разработки
+Для Haskell есть интеграции с разными редакторами, но большинство использует [GHC IDE](https://github.com/digital-asset/ghcide).
+Пока нет скриптов для установки, поэтому нужно собирать ее вручную, что тоже описано в доке.
+
+Важно — перед установкой выполните команду `cabal update`, чтобы подгрузить информацию о доступных пакетах.
+После успешной установки `ghcide` нужно поставить [плагин в VS Code](https://marketplace.visualstudio.com/items?itemName=DigitalAssetHoldingsLLC.ghcide) или нужный редактор.
+
+Про IntelliJ IDE: для IDE от Jetbrains есть плагин для Хаскеля, но он рассчитан на работу со Stack — другим менеджером пакетов, обратите внимание.
+
 
 
 # Расписание
