@@ -27,6 +27,13 @@ https://www.haskell.org/platform/windows.html.
 
 ## Проверьте, что всё работает
 
+Проверьте, что установлен компилятор `ghc >= 8.2`
+
+```
+ghc --version
+The Glorious Glasgow Haskell Compilation System, version 8.8.1
+```
+
 Чтобы убедиться, что всё установлено верно, запустите тест:
 
 ```
