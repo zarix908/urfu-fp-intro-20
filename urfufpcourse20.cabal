@@ -4,6 +4,7 @@ version:             0.1.0.0
 
 library
   exposed-modules:     Lecture00
+                     , Lecture01
   default-extensions:  LambdaCase
   build-depends:       base >= 4.12.0.0
                      , mtl >= 2.2.0
@@ -29,4 +30,5 @@ executable spec
                       -threaded
                       -fwarn-incomplete-patterns
   other-modules:      Lecture00Spec
+                    , Lecture01Spec
   build-tool-depends: hspec-discover:hspec-discover == 2.*
