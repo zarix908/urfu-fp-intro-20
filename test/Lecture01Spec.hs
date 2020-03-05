@@ -19,11 +19,11 @@ spec = do
   describe "howManyDigits" $ do
     it "если n >= 0 и n < 10, то \"single\"" $ property $
       forAll (choose (0, 9)) $ \x -> howManyDigits x === "single"
-    it "если n >= 10 и n < 100, то \"two-digit\"" $ property $
-      forAll (choose (10, 99)) $ \x -> howManyDigits x === "two-digit"
-    it "если n >= 100, то \"three-digit or more\"" $ property $
+    it "если n >= 10 и n < 100, то \"two-digits\"" $ property $
+      forAll (choose (10, 99)) $ \x -> howManyDigits x === "two-digits"
+    it "если n >= 100, то \"three-digits or more\"" $ property $
       forAll (suchThat arbitrary (>100)) $
-        \x -> howManyDigits x === "three-digit or more"
+        \x -> howManyDigits x === "three-digits or more"
   describe "describeNumber" $ do
     it "если n = 0, то \"zero single\"" $
       describeNumber 0 `shouldBe` "zero single"
@@ -33,18 +33,18 @@ spec = do
     it "если n < 0 и n > -10, то \"negative single\"" $ property $
       forAll (choose (-1, -9)) $
         \x -> describeNumber x === "negative single"
-    it "если n >= 10 и n < 100, то \"positive two-digit\"" $ property $
+    it "если n >= 10 и n < 100, то \"positive two-digits\"" $ property $
       forAll (choose (10, 99)) $
-        \x -> describeNumber x === "positive two-digit"
-    it "если n <= -10 и n > -100, то \"negative two-digit\"" $ property $
+        \x -> describeNumber x === "positive two-digits"
+    it "если n <= -10 и n > -100, то \"negative two-digits\"" $ property $
       forAll (choose (-10, -99)) $
-        \x -> describeNumber x === "negative two-digit"
-    it "если n >= 100, то \"positive three-digit or more\"" $ property $
+        \x -> describeNumber x === "negative two-digits"
+    it "если n >= 100, то \"positive three-digits or more\"" $ property $
       forAll (suchThat arbitrary (>100)) $
-        \x -> describeNumber x === "positive three-digit or more"
-    it "если n <= -100, то \"negative three-digit or more\"" $ property $
+        \x -> describeNumber x === "positive three-digits or more"
+    it "если n <= -100, то \"negative three-digits or more\"" $ property $
       forAll (suchThat arbitrary (<= (-100))) $
-        \x -> describeNumber x === "negative three-digit or more"
+        \x -> describeNumber x === "negative three-digits or more"
   describe "factorial" $ do
     it "если n = 0, то \"1\"" $
       factorial 0 `shouldBe` 1

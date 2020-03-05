@@ -247,16 +247,26 @@ someArithmeticCalculations =
     - если n < 0, то "negative"
 -}
 tellSign :: Int -> String
-tellSign n = error "not implemented"
+tellSign n =
+  if n == 0
+    then "zero"
+    else if n > 0
+      then "positive"
+      else "negative"
 
 {-
   `howManyDigits` возвращает количество цифр целого числа `n`:
     - если n = 6, то "single"
-    - если n = 12, то "two-digit"
-    - если n >= 100, то "three-digit or more"
+    - если n = 12, то "two-digits"
+    - если n >= 100, то "three-digits or more"
 -}
 howManyDigits :: Int -> String
-howManyDigits n = error "not implemented"
+howManyDigits n =
+  if abs n < 10
+    then "single"
+    else if (abs n >= 10) && (abs n < 100)
+      then "two-digits"
+      else "three-digits or more"
 
 {-
   `describeNumber` возвращает полное описание целого числа, используя
@@ -267,7 +277,7 @@ howManyDigits n = error "not implemented"
     - если n >= 100, то "positive three-digit or more"
 -}
 describeNumber :: Int -> String
-describeNumber n = error "not implemented"
+describeNumber n = tellSign n ++ " " ++ howManyDigits n
 
 -- </Задачи для самостоятельного решения>
 
@@ -281,8 +291,10 @@ describeNumber n = error "not implemented"
   потому что все циклы это просто синтаксический сахар поверх счетчика и меток
   с "go to" или итератора в языках высокого уровня. Для этого необходимы переменные,
   а точнее изменение состояния.
+-}
 
-  В качестве примера рассмотрим функцию, вычитающую единицу из числа
+{-
+  В качестве примера рассмотрим функцию, вычитающая единицу из числа
   и всегда возвращающую ноль:
 -}
 makeZero :: Int -> Int
@@ -303,7 +315,8 @@ makeZero x =
   больших чисел.
 -}
 factorial :: Integer -> Integer
-factorial n = error "not implemented"
+factorial n = if n == 0 then 1 else
+  n * factorial (n - 1)
 
 {-
   На вход приходит целое число. Необходимо вернуть количество цифр:
@@ -312,7 +325,8 @@ factorial n = error "not implemented"
     - если n = 144545, то 6
 -}
 digitsCount :: Int -> Int
-digitsCount n = error "not implemented"
+digitsCount n = if n == 0 then 1 else
+  if abs n > 0 && abs n < 10 then 1 else 1 + digitsCount (n `div` 10)
 
 -- </Задачи для самостоятельного решения>
 
@@ -347,7 +361,7 @@ makeZero' x = makeZero' (x - 1)
 makeZero'' :: Int -> Int
 makeZero'' x = case x of
   0 -> 0
-  x -> makeZero' (x - 1)
+  x -> makeZero'' (x - 1)
 
 {-
   На самом деле компилятор преобразовывает все уравнения, как в функции `makeZero'`,
@@ -372,7 +386,7 @@ isOldEnoughToBuyBeer n
   -- ^ здесь можно комбинировать какие угодно условия, главное чтобы
   -- выражение имело тип `Bool`
   | otherwise = "No, too young"
-  -- ^ `otherwise` — это просто константа из стандартной библиотеки и равна False
+  -- ^ `otherwise` — это просто константа из стандартной библиотеки и равна True
 
 {-
   Также на уровне синтаксиса языка есть кортежи:
@@ -390,4 +404,5 @@ isOldEnoughToBuyBeer n
   fst3 (x, _, _) = x
   snd3 (_, y, _) = y
   thrd3 (_, _, z) = z
+    
 -}
