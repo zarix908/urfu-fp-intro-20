@@ -88,16 +88,24 @@ infixr 5 :.
     - headOr 2 Nil ~> 2
 -}
 headOr :: a -> List a -> a
-headOr = error "not implemented"
+headOr = \d -> \case
+  Nil -> d
+  a :. _ -> a
 
 {-
   `take n` возвращает первые `n` элементов списка:
     - take 2 (1 :. 2 :. 3 :. Nil) ~> (1 :. 2 :. Nil)
     - take 50 (1 :. 2 :. 3 :. Nil) ~> (1 :. 2 :. 3 :. Nil)
     - take 0 (1 :. 2 :. 3 :. Nil) ~> Nil
+    - take (-4) (1 :. 2 :. 3 :. Nil) ~> Nil
 -}
 take :: Integer -> List a -> List a
-take = error "not implemented"
+take = go
+  where
+    go _ Nil = Nil
+    go n (x :. xs)
+      | n <= 0 = Nil
+      | otherwise = x :. go (n - 1) xs
 
 {-
   `length xs` возвращает длину списка `xs`:
@@ -107,7 +115,9 @@ take = error "not implemented"
     - length ('a' :. 'b' :. Nil) ~> 2
 -}
 length :: List a -> Integer
-length = error "not implemented"
+length = \case
+  Nil -> 0
+  _ :. xs -> 1 + length xs
 
 {-
   `sum` вычисляет сумму списка целых чисел:
@@ -117,7 +127,9 @@ length = error "not implemented"
     - sum (104 :. 123 :. 35 :. Nil) ~> 262
 -}
 sum :: List Integer -> Integer
-sum = error "not implemented"
+sum = \case
+  Nil -> 0
+  a :. xs -> a + sum xs
 
 -- </Задачи для самостоятельного решения>
 
@@ -215,7 +227,9 @@ sum = error "not implemented"
             4   0
 -}
 foldr :: (a -> b -> b) -> b -> List a -> b
-foldr f b xs = error "not implemented"
+foldr f b xs = case xs of
+  Nil -> b
+  x :. ys -> f x (foldr f b ys)
 
 {-
   `map` принимает функцию `f` и список, применяя `f` к каждому элементу:
@@ -224,10 +238,10 @@ foldr f b xs = error "not implemented"
   - map (\x -> x + 1) Nil ~> Nil
   - map (\x -> "hi") (1 :. 2 :. 3 :. Nil) ~> ("hi" :. "hi" :. "hi" :. Nil)
 
-  Реализуйте с помощью `foldr`.
+  Реализуйте с помощью `foldr :: (a -> b -> b) -> b -> List a -> b`.
 -}
 map :: (a -> b) -> List a -> List b
-map = error "not implemented"
+map = \f xs -> foldr (\a b -> f a :. b) Nil xs
 
 {-
   `filter` принимает предикат `f` и список, возвращая список с элементами
@@ -237,10 +251,10 @@ map = error "not implemented"
   - filter (\x -> x == 2) (1 :. 2 :. 3 :. Nil) ~> (2 :. Nil)
   - filter (\x -> length x == 2) ("hi" :. "hello" :. Nil) ~> ("hi" :. Nil)
 
-  Реализуйте с помощью `foldr`.
+  Реализуйте с помощью `foldr :: (a -> b -> b) -> b -> List a -> b`.
 -}
 filter :: (a -> Bool) -> List a -> List a
-filter = error "not implemented"
+filter = \f xs -> foldr (\a b -> if f a then a :. b else b) Nil xs
 
 {-
   Правая свёртка действует на список справа, с конца.
@@ -283,7 +297,9 @@ filter = error "not implemented"
   список `xs` слева:
 -}
 foldl :: (b -> a -> b) -> b -> List a -> b
-foldl f b xs = error "not implemented"
+foldl f b xs = case xs of
+  Nil -> b
+  x :. ys -> foldl f (f b x) ys
 
 {-
   `reverse` разворачивает список:
@@ -291,10 +307,10 @@ foldl f b xs = error "not implemented"
     - reverse (1 :. 2 :. 3 :. Nil) ~> (3 :. 2 :. 1 :. Nil)
     - reverse ('a' :. 'b' :. 'c' :. Nil) ~> ('c' :. 'b' :. 'a' :. Nil) 
 
-  Реализуйте с помощью `foldl`.
+  Реализуйте с помощью `foldl :: (b -> a -> b) -> b -> List a -> b`.
 -}
 reverse :: List a -> List a
-reverse = error "not implemented"
+reverse = foldl (flip (:.)) Nil
 
 {-
   Пришло время перейти к стандартным спискам. Напишите функцию, которая
@@ -308,11 +324,15 @@ reverse = error "not implemented"
     - (:.) соответствует (:)
 -}
 toListH :: List a -> [a]
-toListH = error "not implemented"
+toListH = \case
+  Nil -> []
+  x :. xs -> x : toListH xs
 
 -- И обратно
 fromListH :: [a] -> List a
-fromListH = error "not implemented"
+fromListH = \case
+  [] -> Nil
+  x : xs -> x :. fromListH xs
 
 -- </Задачи для самостоятельного решения>
 
@@ -391,7 +411,7 @@ fromListH = error "not implemented"
     P.foldr :: (a -> b -> b) -> b -> [a] -> b
 -}
 concat :: [[a]] -> [a]
-concat ls = error "not implemented"
+concat ls = P.foldr (\b a -> b ++ a) [] ls
 
 {-
   Функция `intercalate` вставляет список элементов между другими списками.
@@ -406,6 +426,8 @@ concat ls = error "not implemented"
     P.foldr :: (a -> b -> b) -> b -> [a] -> b
 -}
 intercalate :: [a] -> [[a]] -> [a]
-intercalate sep ls = error "not implemented"
+intercalate sep [] = []
+intercalate sep ls =
+  let l = last ls in P.foldr (\b a -> b ++ sep ++ a) [] (init ls) ++ l
 
 -- </Задачи для самостоятельного решения>
