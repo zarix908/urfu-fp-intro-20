@@ -1,3 +1,8 @@
 resolver: lts-15.1
 packages:
   - .
+
+extra-deps:
+- git: https://github.com/ak3n/mikrokosmos.git
+  commit: 12377767098ede3123d942c61e8912cf95e405fb
+
