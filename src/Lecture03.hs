@@ -298,7 +298,7 @@ module Lecture03 where
     - not false ->> true
 -}
 not :: String
-not = "notimplemented"
+not = "\\b.b false true"
 
 {-
   Напишите терм `and`:
@@ -309,7 +309,7 @@ not = "notimplemented"
     - and false false ->> false
 -}
 and :: String
-and = "notimplemented"
+and = "\\p.\\q.p q p"
 
 {-
   Напишите терм `or`:
@@ -320,7 +320,7 @@ and = "notimplemented"
     - or false false ->> false
 -}
 or :: String
-or = "notimplemented"
+or = "\\p.\\q.p p q"
 -- </Задачи для самостоятельного решения>
 
 {-
@@ -373,7 +373,7 @@ or = "notimplemented"
   isZero n = False
 -}
 isZero :: String
-isZero = "notimplemented"
+isZero = "\\n.\\a.\\b.n (\\z.b) a"
 
 -- </Задачи для самостоятельного решения>
 
@@ -459,7 +459,7 @@ isZero = "notimplemented"
   Что она возвращает? Чему равен pred pred 1?
 -}
 fib :: String
-fib = "notimplemented"
+fib = "Y (\\f.\\n.(\\n.\\x.\\y.n (\\z.y) x) n (succ 0) (plus (f (pred n)) (f (pred (pred n)))))"
 
 -- </Задачи для самостоятельного решения>
 

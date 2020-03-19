@@ -7,6 +7,7 @@ library
                      , Lecture01
                      , Lecture02
                      , Lecture03
+                     , Lecture04
   default-extensions:  LambdaCase
   build-depends:       base >= 4.12.0.0
                      , mtl >= 2.2.0
@@ -36,6 +37,7 @@ executable spec
                     , Lecture01Spec
                     , Lecture02Spec
                     , Lecture03Spec
+                    , Lecture04Spec
   build-tool-depends: hspec-discover:hspec-discover == 2.*
 
 executable lambda
