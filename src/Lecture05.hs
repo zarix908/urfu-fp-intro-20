@@ -90,6 +90,19 @@ inHowManyYearsChinaWins = error "not implemented"
 
     В тестах есть случай с большими списками. Поэтому обычное решение будет
     неэффективным и нужно придумать как его улучшить с помощью строгих вычислений.
+    В зависимости от того, чем вы захотите воспользоваться, вам нужно будет
+    включить BangPatterns:
+
+      в GHCI:
+        :set -XBangPatterns
+
+      в начале файла с модулем:
+        {-# LANGUAGE BangPatterns # - }
+      --  удалите лишний пробел      ^
+
+    или подключить Data.List:
+
+      import Data.List
 -}
 
 data Country = Country String Integer deriving (Eq, Show)
