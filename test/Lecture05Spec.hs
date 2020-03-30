@@ -10,6 +10,11 @@ gen c@(Country n k) =
   let nextCountry = Country n (toInteger (length n) + k + 1)
   in c : gen nextCountry
 
+epsilon :: Double
+epsilon = 0.0000001
+areEquivalent :: [Double] -> [Double] -> Bool
+areEquivalent xs ys = all (\(x, y) -> abs(x - y) < epsilon) $ zip xs ys
+
 spec :: Spec
 spec = do
   describe "nthPrime" $ do
@@ -21,9 +26,12 @@ spec = do
       nthPrime (983 :: Int) `shouldBe` (7753 :: Integer)
   describe "yearGDP" $ do
     it "yearGDP 100 0.1 ~> [100, 100.1, 100.20009(9), 100.3003.., ...]" $
-      (take 4 $ yearGDP 100 0.1) `shouldBe` ([100.0,100.1,100.20009999999998,100.30030009999997] :: [Double])
+      (take 4 $ yearGDP 100 0.1) `shouldSatisfy` areEquivalent ([100.0,100.1,100.20009999999998,100.30030009999997] :: [Double])
     it "yearGDP 130 10 ~> [130.0,143.0,157.3, ...]" $
-      (take 3 $ yearGDP 130 10) `shouldBe` ([130.0,143.0,157.3] :: [Double])
+      (take 3 $ yearGDP 130 10) `shouldSatisfy` areEquivalent ([130.0,143.0,157.3] :: [Double])
+  describe "inHowManyYearsChinaWins" $ do
+    it "inHowManyYearsChinaWins ~> 51" $
+      inHowManyYearsChinaWins `shouldBe` (51 :: Int)
   describe "stat" $ do
     it "stat [China 80026] ~> [China 80026, Russia 0, Italy 0, USA 0, GreatBritain 0]" $
       stat [Country "China" 80026] `shouldBe` [(Country "China" 80026), (Country "Russia" 0), (Country "Italy" 0), (Country "USA" 0), (Country "GreatBritain" 0)]
