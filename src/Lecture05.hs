@@ -97,8 +97,8 @@ inHowManyYearsChinaWins = error "not implemented"
         :set -XBangPatterns
 
       в начале файла с модулем:
-        {-# LANGUAGE BangPatterns # - }
-      --  удалите лишний пробел      ^
+        { -# LANGUAGE BangPatterns # - }
+         ^   удалите лишние пробелы   ^
 
     или подключить Data.List:
 
