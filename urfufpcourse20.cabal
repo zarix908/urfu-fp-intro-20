@@ -9,6 +9,8 @@ library
                      , Lecture03
                      , Lecture04
                      , Lecture05
+                     , Lecture06
+                     , Lecture06.XsOs
   default-extensions:  LambdaCase
   build-depends:       base >= 4.12.0.0
                      , mtl >= 2.2.0
@@ -40,6 +42,7 @@ executable spec
                     , Lecture03Spec
                     , Lecture04Spec
                     , Lecture05Spec
+                    , Lecture06Spec
   build-tool-depends: hspec-discover:hspec-discover == 2.*
 
 executable lambda
