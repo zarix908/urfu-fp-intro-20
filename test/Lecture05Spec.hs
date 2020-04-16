@@ -30,8 +30,8 @@ spec = do
     it "yearGDP 130 10 ~> [130.0,143.0,157.3, ...]" $
       (take 3 $ yearGDP 130 10) `shouldSatisfy` areEquivalent ([130.0,143.0,157.3] :: [Double])
   describe "inHowManyYearsChinaWins" $ do
-    it "inHowManyYearsChinaWins ~> 51" $
-      inHowManyYearsChinaWins `shouldBe` (51 :: Int)
+    it "inHowManyYearsChinaWins ~> 50" $
+      inHowManyYearsChinaWins `shouldBe` (50 :: Int)
   describe "stat" $ do
     it "stat [China 80026] ~> [China 80026, Russia 0, Italy 0, USA 0, GreatBritain 0]" $
       stat [Country "China" 80026] `shouldBe` [(Country "China" 80026), (Country "Russia" 0), (Country "Italy" 0), (Country "USA" 0), (Country "GreatBritain" 0)]
