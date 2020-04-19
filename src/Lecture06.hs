@@ -119,7 +119,7 @@ module Lecture06 where
 
     Доказывать мы это, конечно, не будем, но убедиться в этом несложно.
     Действительно, если у терма есть типов, значит можно предъявить соответствующее
-    дерево вывода. Ну и сложно придумать, как так это дерево может изменится
+    дерево вывода. Ну и сложно придумать, как так это дерево может измениться
     и вывести другой тип при тех же начальных данных.
 -}
 
@@ -129,7 +129,8 @@ module Lecture06 where
   Если да, то приведите пример Γ и T и постройте дерево вывода Γ ⊢ x x : T;
   если нет, то докажите это (напишите, почему)
 
-  *Решение*
+  Пусть (x x) : T ∈ Г => [(T-App)] => x : T' -> T  и  x : T'.
+  Значит, чтобы (x x) был типизируемым x должен иметь сразу два типа => противоречие.
 -}
 -- </Задачи для самостоятельного решения>
 
@@ -326,7 +327,17 @@ module Lecture06 where
   Убедитесь, что selfApp работает. Приведите терм `selfApp id` в нормальную форму
   и запишите все шаги β-редукции ->β.
 
-  selfApp id = ... ->β ...
+  selfApp id =
+    (λx:∀X.X->X.x [∀X.X->X] x) (ΛX. λx:X.x) ->β
+    (ΛX. λx:X.x) [∀X.X->X] (ΛX. λx:X.x) = [(E-TApp)] =
+--        ^                      ^
+--       id      [∀X.X->X]       id             -- т.е. selfApp действительно применила id к самой себе
+
+    (λx:∀X.X->X.x) (ΛX. λx:X.x) ->β
+    ΛX. λx:X.x =
+    id
+
+  Таким образом терм (x x), который был нетипизируем в STLC, оказался типизируем в System F.
 -}
 -- </Задачи для самостоятельного решения>
 
@@ -578,16 +589,16 @@ module Lecture06 where
 -}
 
 f :: [a] -> Int
-f = error "not implemented"
+f = length
 
 g :: (a -> b)->[a]->[b]
-g = error "not implemented"
+g = map
 
 q :: a -> a -> a
-q x y = error "not implemented"
+q x _ = x
 
 p :: (a -> b) -> (b -> c) -> (a -> c)
-p f g = error "not implemented"
+p f g = g . f
 
 {-
   Крестики-нолики Чёрча.
@@ -624,7 +635,10 @@ createRow x y z = \case
   Third -> z
 
 createField :: Row -> Row -> Row -> Field
-createField x y z = error "not implemented"
+createField x y z = \case
+  First -> x
+  Second -> y
+  Third -> z
 
 -- Чтобы было с чего начинать проверять ваши функции
 emptyField :: Field
@@ -633,17 +647,51 @@ emptyField = createField emptyLine emptyLine emptyLine
     emptyLine = createRow Empty Empty Empty
 
 setCellInRow :: Row -> Index -> Value -> Row
-setCellInRow r i v = error "not implemented"
+setCellInRow row i value = \j -> if i == j then value else row j
 
 -- Возвращает новое игровое поле, если клетку можно занять.
 -- Возвращает ошибку, если место занято.
 setCell :: Field -> Index -> Index -> Value -> Either String Field
-setCell field i j v = error "not implemented"
+setCell field i j value = if isFree then Right newField else Left error
+  where
+    isFree = field i j == Empty
+    error = "There is '"++ show (field i j) ++"' on " ++ show i ++ " " ++ show j
+    newField = \k ->
+      if i == k
+      then setCellInRow (field i) j value
+      else field k
 
 data GameState = InProgress | Draw | XsWon | OsWon deriving (Eq, Show)
 
+idx :: [Index]
+idx = [First, Second, Third]
+
+rows :: [[(Index, Index)]]
+rows = map (\k -> zip (repeat k) idx) idx
+
+winnerIndexes :: [[(Index, Index)]]
+winnerIndexes = concat [diagonal, diagonal', rows, columns]
+  where
+    diagonal = [zip idx idx]
+    diagonal' = [zip idx (reverse idx)]
+    columns = map (\k -> zip idx (repeat k)) idx
+
+winnerSum :: Field -> [(Index, Index)] -> Int
+winnerSum field indexes = sum $ map (\(i, j) -> toIndicator (field i j)) indexes
+  where
+    toIndicator Empty = 0
+    toIndicator Cross = 1
+    toIndicator Zero = (-1)
+
 getGameState :: Field -> GameState
-getGameState field = error "not implemented"
+getGameState field = case winnerIndicator of
+  [] -> if fieldContainsEmpty then InProgress else Draw
+  3:_ -> XsWon
+  _ -> OsWon
+  where
+    winnerIndicator = dropWhile doesNotHaveWinner $ map (winnerSum field) winnerIndexes
+    fieldContainsEmpty = any (\(i, j) -> field i j == Empty) (concat rows)
+    doesNotHaveWinner sum = sum /= 3 && sum /= (-3)
 
 -- </Задачи для самостоятельного решения>
 

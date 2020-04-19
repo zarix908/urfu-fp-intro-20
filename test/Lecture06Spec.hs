@@ -132,3 +132,6 @@ spec = do
 
     it "getGameState (x o x) (x o x) (o x o) ~> Draw" $
       (stateFromString "xox" "xox" "oxo") `shouldBe` Draw
+
+    it "getGameState (. . x) (. o .) (. x .) ~> InProgress" $
+      (stateFromString "..x" ".o." ".x.") `shouldBe` InProgress
