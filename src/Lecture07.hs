@@ -65,15 +65,35 @@ data Expr
   | Abs Expr
   deriving Eq
 
+instance Show Expr where
+    show expr = case expr of
+            Number n     -> show n
+            Plus e1 e2   -> wrap e1 ++ " + " ++ wrap e2
+            Minus e1 e2  -> wrap e1 ++ " - " ++ wrap e2 
+            Mult e1 e2   -> wrap e1 ++ " * " ++ wrap e2
+            UnaryMinus e -> "-" ++ wrap e
+            Abs e        -> "|" ++ show e ++ "|"
+        where
+            wrap e = case e of
+                (Number n) -> show n
+                (Abs e)    -> show e
+                _          -> "(" ++ show e ++ ")"
+
 {-
   Реализуйте instance Semigroup для вектора:
 -}
 newtype Vec a = Vec { unVec :: [a] } deriving (Eq, Show)
 
+instance (Num m) => Semigroup (Vec m) where
+    (<>) (Vec a) (Vec b) = Vec $ (map $ uncurry (+)) (zip a b)
+
 {-
   Реализуйте instance Semigroup для типа для логгирования:
 -}
 newtype LogEntry = LogEntry { unLogEntry :: String } deriving (Eq, Show)
+
+instance Semigroup LogEntry where
+    (<>) (LogEntry s1) (LogEntry s2) = LogEntry (s1 ++ s2) 
 
 {-
   В `src/Lecture07/Money.hs` определены:
@@ -84,21 +104,35 @@ newtype LogEntry = LogEntry { unLogEntry :: String } deriving (Eq, Show)
   Реализуйте инстансы Semigroup для Money a.
 -}
 
+instance Semigroup (Money USD) where 
+  (<>) a b = mkDollars $ getMoney a + getMoney b
+
+instance Semigroup (Money RUB) where 
+  (<>) a b = mkRubbles $ getMoney a + getMoney b
+
 {-
   Реализуйте инстанс Functor для ExactlyOne
 -}
 data ExactlyOne a = ExactlyOne a deriving (Eq, Show)
 
+instance Functor ExactlyOne where
+    fmap f (ExactlyOne a) = ExactlyOne $ f a 
 {-
   Реализуйте инстанс Functor для `Maybe a`
 -}
 data Maybe' a = Just' a | Nothing' deriving (Eq, Show)
 
+instance Functor Maybe' where
+    fmap f (Just' a)    = Just' $ f a
+    fmap _ Nothing'     = Nothing' 
 {-
   Реализуйте инстанс Functor для `List a`
 -}
 data List a = Nil | Cons a (List a) deriving (Eq, Show)
 
+instance Functor List where
+    fmap f Nil         = Nil
+    fmap f (Cons a as) = Cons (f a) $ fmap f as
 {-
   `FileTree a` — тип для представления дерева файловой системы.
 
@@ -146,8 +180,9 @@ latestModified = getMax . foldMap (\FileInfo{..} -> Max modified)
 -}
 
 instance Foldable FileTree where
-  foldMap = undefined
-
+  foldMap _ Empty = mempty
+  foldMap f (File _ a)  = f a
+  foldMap f (Dir  _ ts) = mconcat $ map (foldMap f) ts
 {-
   В этом задании вам необходимо придумать и написать иерархию исключений
   с помощью классов типов на основе набора требований:
@@ -165,3 +200,4 @@ instance Foldable FileTree where
 -}
 
 -- </Задачи для самостоятельного решения>
+
